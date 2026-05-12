@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { 
+      width: 300px; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: linear-gradient(135deg, #D3EEFF, #FFFFFF); 
+      overflow: hidden; 
+    }
+    .robot-header { 
+      background: #FFFFFF; 
+      text-align: center; 
+      padding-top: 15px; 
+      padding-bottom: 5px;
+    }
+    .robot-header img { 
+      width: 130px; 
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .title-banner { 
+      background: #003087; 
+      color: #FFFFFF; 
+      text-align: center; 
+      padding: 15px 0; 
+      font-size: 22px; 
+      font-weight: 800; 
+      letter-spacing: 1.5px; 
+      position: relative; 
+    }
+    .title-banner::after { 
+      content: ""; 
+      position: absolute; 
+      bottom: 0; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      width: 120px; 
+      height: 4px; 
+      background: #00F2FF; 
+      border-radius: 2px 2px 0 0;
+    }
+
+    .content { 
+      padding: 25px 20px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 15px; 
+    }
+    
+    button { 
+      background: #E1F5FE; 
+      color: #003087; 
+      border: 2px solid #003087; 
+      border-radius: 30px; 
+      padding: 14px; 
+      font-weight: 800; 
+      font-size: 15px; 
+      cursor: pointer; 
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 6px rgba(0, 48, 135, 0.1);
+    }
+    button:hover { 
+      background: #003087; 
+      color: #FFFFFF;
+      transform: translateY(-2px); 
+      box-shadow: 0 6px 12px rgba(0, 48, 135, 0.2);
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .footer { 
+      background: #003087; 
+      color: white; 
+      padding: 15px; 
+      font-weight: 600; 
+      font-size: 14px; 
+      border-top: 3px solid #00F2FF; 
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #count { 
+      color: #00F2FF; 
+      font-size: 20px; 
+      font-weight: 900;
+    }
+    
+    /* Error state styling */
+    #error-msg {
+      color: #d32f2f;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      display: none;
+      margin-top: -5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="robot-header">
+    <img src="icon.png" alt="Assistant Mascot">
+  </div>
+  <div class="title-banner">ET LAB FILLER</div>
+  
+  <div class="content">
+    <button id="btn-top">FILL TOP ANSWERS</button>
+    <button id="btn-random">FILL REALISTIC ANSWERS</button>
+    <div id="error-msg">❌ Please open an ETLab page.</div>
+  </div>
+  
+  <div class="footer">
+    <span>QUESTIONS FILLED:</span>
+    <span id="count">0</span>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
