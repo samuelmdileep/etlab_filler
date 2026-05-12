@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { 
+      width: 300px; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: linear-gradient(135deg, #D3EEFF, #FFFFFF); 
+      overflow: hidden; 
+      position: relative; /* Added to keep the info button positioned correctly */
+    }
+    
+    /* --- NEW: Info Button Styles --- */
+    .info-btn {
+      position: absolute;
+      top: 12px;
+      right: 15px;
+      width: 26px;
+      height: 26px;
+      background: #E1F5FE;
+      color: #003087;
+      border: 2px solid #003087;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 22px;
+      font-weight: 900;
+      font-size: 14px;
+      font-family: 'Courier New', Courier, monospace;
+      text-decoration: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
+      z-index: 10;
+    }
+    
+    .info-btn:hover {
+      background: #003087;
+      color: #FFFFFF;
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(0, 48, 135, 0.3);
+    }
+
+    .robot-header { 
+      background: #FFFFFF; 
+      text-align: center; 
+      padding-top: 15px; 
+      padding-bottom: 5px;
+    }
+    .robot-header img { 
+      width: 130px; 
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .title-banner { 
+      background: #003087; 
+      color: #FFFFFF; 
+      text-align: center; 
+      padding: 15px 0; 
+      font-size: 22px; 
+      font-weight: 800; 
+      letter-spacing: 1.5px; 
+      position: relative; 
+    }
+    .title-banner::after { 
+      content: ""; 
+      position: absolute; 
+      bottom: 0; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      width: 120px; 
+      height: 4px; 
+      background: #00F2FF; 
+      border-radius: 2px 2px 0 0;
+    }
+
+    .content { 
+      padding: 20px 20px 10px 20px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+    }
+    
+    button { 
+      background: #E1F5FE; 
+      color: #003087; 
+      border: 2px solid #003087; 
+      border-radius: 30px; 
+      padding: 14px; 
+      font-weight: 800; 
+      font-size: 15px; 
+      cursor: pointer; 
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 6px rgba(0, 48, 135, 0.1);
+    }
+    button:hover { 
+      background: #003087; 
+      color: #FFFFFF;
+      transform: translateY(-2px); 
+      box-shadow: 0 6px 12px rgba(0, 48, 135, 0.2);
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .dev-section {
+      padding: 0 20px 20px 20px;
+      text-align: center;
+    }
+    
+    .dev-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #FFFFFF;
+      color: #003087;
+      border: 2px solid #00F2FF;
+      border-radius: 30px;
+      padding: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .dev-btn:hover {
+      background: #00F2FF;
+      color: #003087;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 242, 255, 0.3);
+    }
+
+    .footer { 
+      background: #003087; 
+      color: white; 
+      padding: 15px; 
+      font-weight: 600; 
+      font-size: 14px; 
+      border-top: 3px solid #00F2FF; 
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #count { 
+      color: #00F2FF; 
+      font-size: 20px; 
+      font-weight: 900;
+    }
+    
+    #error-msg {
+      color: #d32f2f;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- --- NEW: Info Button pointing to local privacy.html --- -->
+  <a href="privacy.html" target="_blank" class="info-btn" title="About & Privacy">i</a>
+
+  <div class="robot-header">
+    <img src="icon.png" alt="Assistant Mascot">
+  </div>
+  
+  <div class="title-banner">ET LAB FILLER</div>
+  
+  <div class="content">
+    <button id="btn-top">FILL TOP ANSWERS</button>
+    <button id="btn-random">FILL REALISTIC ANSWERS</button>
+    <div id="error-msg">❌ Please open an ETLab page.</div>
+  </div>
+
+  
+  
+  <div class="footer">
+    <span>QUESTIONS FILLED:</span>
+    <span id="count">0</span>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
