@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "manifest_version": 3,
   "name": "ETLab Auto Assistant",
@@ -28,4 +29,36 @@
       "run_at": "document_idle"
     }
   ]
+=======
+{
+  "manifest_version": 3,
+  "name": "ETLab Auto Assistant",
+  "version": "1.3",
+  "description": "Smart, human-like automated form filler for ETLab.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.etlab.in/*"
+  ],
+  "icons": {
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Open Assistant",
+    "default_icon": {
+      "128": "icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.etlab.in/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+>>>>>>> 50b7d4223cc992eb7d1c38839ca7aa88e9442d2c
 }
