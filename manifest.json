@@ -2,7 +2,7 @@
 {
   "manifest_version": 3,
   "name": "ETLab Auto Assistant",
-  "version": "1.4",
+  "version": "1.5",
   "description": "Smart, human-like automated form filler for ETLab.",
   "permissions": [
     "activeTab",
