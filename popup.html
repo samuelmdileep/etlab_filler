@@ -4,16 +4,15 @@
   <meta charset="UTF-8">
   <style>
     body { 
-      width: 300px; 
+      width: 320px; 
       margin: 0; 
       padding: 0; 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       background: linear-gradient(135deg, #D3EEFF, #FFFFFF); 
       overflow: hidden; 
-      position: relative; /* Added to keep the info button positioned correctly */
+      position: relative;
     }
     
-    /* --- NEW: Info Button Styles --- */
     .info-btn {
       position: absolute;
       top: 12px;
@@ -39,7 +38,6 @@
       background: #003087;
       color: #FFFFFF;
       transform: scale(1.1);
-      box-shadow: 0 4px 8px rgba(0, 48, 135, 0.3);
     }
 
     .robot-header { 
@@ -49,7 +47,7 @@
       padding-bottom: 5px;
     }
     .robot-header img { 
-      width: 130px; 
+      width: 120px; 
       border-radius: 50%;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
@@ -58,8 +56,8 @@
       background: #003087; 
       color: #FFFFFF; 
       text-align: center; 
-      padding: 15px 0; 
-      font-size: 22px; 
+      padding: 12px 0; 
+      font-size: 20px; 
       font-weight: 800; 
       letter-spacing: 1.5px; 
       position: relative; 
@@ -76,21 +74,43 @@
       border-radius: 2px 2px 0 0;
     }
 
+    .helper-notice {
+      background: #fff3cd;
+      color: #856404;
+      font-size: 12px;
+      text-align: center;
+      padding: 8px 15px;
+      font-weight: 600;
+      border-bottom: 1px solid #ffeeba;
+    }
+
     .content { 
-      padding: 20px 20px 10px 20px; 
+      padding: 15px 20px; 
       display: flex; 
       flex-direction: column; 
-      gap: 12px; 
+      gap: 10px; 
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #003087;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 5px;
+      margin-bottom: 2px;
+      border-bottom: 1px solid rgba(0, 48, 135, 0.2);
+      padding-bottom: 4px;
     }
     
     button { 
       background: #E1F5FE; 
       color: #003087; 
       border: 2px solid #003087; 
-      border-radius: 30px; 
-      padding: 14px; 
+      border-radius: 8px; 
+      padding: 12px; 
       font-weight: 800; 
-      font-size: 15px; 
+      font-size: 13px; 
       cursor: pointer; 
       transition: all 0.2s ease;
       box-shadow: 0 4px 6px rgba(0, 48, 135, 0.1);
@@ -99,85 +119,69 @@
       background: #003087; 
       color: #FFFFFF;
       transform: translateY(-2px); 
-      box-shadow: 0 6px 12px rgba(0, 48, 135, 0.2);
-    }
-    button:active {
-      transform: translateY(1px);
     }
 
-    .dev-section {
-      padding: 0 20px 20px 20px;
-      text-align: center;
+    .btn-auto {
+      background: #003087; 
+      color: #00F2FF; 
+      border-color: #00F2FF; 
     }
-    
-    .dev-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: #FFFFFF;
-      color: #003087;
-      border: 2px solid #00F2FF;
-      border-radius: 30px;
-      padding: 10px;
-      font-weight: 700;
-      font-size: 13px;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    
-    .dev-btn:hover {
+    .btn-auto:hover {
       background: #00F2FF;
       color: #003087;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 242, 255, 0.3);
+    }
+
+    #btn-stop {
+      background: #d32f2f; 
+      color: #ffffff; 
+      border-color: #b71c1c; 
+      display: none;
+      margin-top: 10px;
     }
 
     .footer { 
-      background: #003087; 
-      color: white; 
-      padding: 15px; 
-      font-weight: 600; 
-      font-size: 14px; 
-      border-top: 3px solid #00F2FF; 
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background: #003087; color: white; padding: 15px; font-weight: 600; 
+      font-size: 14px; border-top: 3px solid #00F2FF; display: flex;
+      justify-content: space-between; align-items: center;
     }
-    #count { 
-      color: #00F2FF; 
-      font-size: 20px; 
-      font-weight: 900;
-    }
+    #count { color: #00F2FF; font-size: 20px; font-weight: 900; }
     
     #error-msg {
-      color: #d32f2f;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 600;
-      display: none;
+      color: #d32f2f; text-align: center; font-size: 13px; font-weight: 700;
+      display: none; background: #ffebee; padding: 8px; border-radius: 6px;
     }
   </style>
 </head>
 <body>
 
-  <!-- --- NEW: Info Button pointing to local privacy.html --- -->
-  <a href="privacy.html" target="_blank" class="info-btn" title="About & Privacy">i</a>
+  <a href="https://samuelmdileep.github.io/etlab_filler" target="_blank" class="info-btn" title="About & Privacy">i</a>
 
   <div class="robot-header">
     <img src="icon.png" alt="Assistant Mascot">
   </div>
   
   <div class="title-banner">ET LAB FILLER</div>
+
+  <div class="helper-notice" id="helper-notice">
+    📍 Open an ETLab Appraisal page to begin.
+  </div>
   
-  <div class="content">
-    <button id="btn-top">FILL TOP ANSWERS</button>
-    <button id="btn-random">FILL REALISTIC ANSWERS</button>
-    <div id="error-msg">❌ Please open an ETLab page.</div>
+  <div class="content" id="action-content">
+    
+    <div class="section-title">📄 Current Page Only</div>
+    <button id="btn-page-top">Fill This Survey (Excellent)</button>
+    <button id="btn-page-random">Fill This Survey (Realistic)</button>
+    
+    <div class="section-title" style="margin-top: 10px;">🚀 Full Autopilot Mode</div>
+    <button id="btn-auto-top" class="btn-auto">Auto-Complete ALL (Excellent)</button>
+    <button id="btn-auto-random" class="btn-auto">Auto-Complete ALL (Realistic)</button>
+    
   </div>
 
-  
+  <div class="content" style="padding-top: 0;">
+    <button id="btn-stop">🛑 STOP AUTOPILOT</button>
+    <div id="error-msg">❌ Error</div>
+  </div>
   
   <div class="footer">
     <span>QUESTIONS FILLED:</span>
@@ -186,3 +190,4 @@
   
   <script src="popup.js"></script>
 </body>
+</html>

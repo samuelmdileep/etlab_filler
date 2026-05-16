@@ -1,44 +1,100 @@
-<<<<<<< HEAD
-// Listen for commands from the popup
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "FILL_TOP") {
-    processAppraisal(true);
-    sendResponse({ status: "started" });
-  } else if (request.action === "FILL_RANDOM") {
-    processAppraisal(false);
-    sendResponse({ status: "started" });
+// --- 1. WAKE UP ON PAGE LOAD ---
+window.addEventListener('load', async () => {
+  const { autopilot } = await chrome.storage.local.get(['autopilot']);
+  if (autopilot) {
+    console.log("[ETLab Assistant] Autopilot ACTIVE. Taking control in 1.5 seconds...");
+    setTimeout(executeAutopilotStep, 1500); 
   }
+});
+
+// --- 2. LISTEN FOR MANUAL COMMANDS ---
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+  if (request.action === "FILL_TOP") processAppraisal(true);
+  if (request.action === "FILL_RANDOM") processAppraisal(false);
+  if (request.action === "START_AUTOPILOT") executeAutopilotStep();
+  sendResponse({ status: "started" });
   return true; 
 });
 
-// Utility function to create a pause/delay
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-async function processAppraisal(alwaysTop) {
-  const radios = document.querySelectorAll("input[type='radio']");
-  if (radios.length === 0) {
-    console.warn("[ETLab Automator] No radio buttons found on this page.");
+// --- 3. THE AUTOPILOT BRAIN ---
+async function executeAutopilotStep() {
+  // Fetch both the autopilot state AND your chosen mode
+  const state = await chrome.storage.local.get(['autopilot', 'autoMode']);
+  if (!state.autopilot) return; // Safety check
+  
+  // SCENARIO A: We are on the Subject List Dashboard
+  const subjectTable = document.querySelector('table.section');
+  if (subjectTable) {
+    console.log("[ETLab Assistant] Dashboard detected. Scanning page for uncompleted surveys...");
+    
+    const forms = document.querySelectorAll('form#section-form');
+    const rows = subjectTable.querySelectorAll('tbody tr');
+    let foundUncompletedForm = null;
+
+    for (let i = 0; i < rows.length; i++) {
+      let rowText = rows[i].innerText || rows[i].textContent || "";
+      if (!rowText.includes('Completed')) {
+        if (forms[i]) {
+          foundUncompletedForm = forms[i];
+          break; 
+        }
+      }
+    }
+
+    if (foundUncompletedForm) {
+      console.log("[ETLab Assistant] Uncompleted survey found! Opening it now...");
+      foundUncompletedForm.submit(); 
+    } else {
+      console.log("[ETLab Assistant] All surveys are completed on this page.");
+      await chrome.storage.local.set({ autopilot: false });
+      alert("✅ ETLab Auto Assistant: All surveys are fully completed!");
+    }
     return;
   }
 
+  // SCENARIO B: We are on an actual Survey Page
+  const radios = document.querySelectorAll("input[type='radio']");
+  if (radios.length > 0) {
+    console.log(`[ETLab Assistant] Survey detected. Mode: ${state.autoMode}`);
+    
+    // --- NEW: Run the engine based on the saved mode ---
+    const alwaysTop = (state.autoMode === 'top');
+    await processAppraisal(alwaysTop); 
+    
+    console.log("[ETLab Assistant] Survey filled. Clicking final Submit...");
+    await sleep(500); 
+
+    const finalSubmitBtn = document.querySelector('button[type="submit"], input[type="submit"], .btn-success');
+    if (finalSubmitBtn) {
+      finalSubmitBtn.click();
+    } else {
+      console.error("[ETLab Assistant] CRITICAL: Could not find the final Submit button. Pausing autopilot.");
+      await chrome.storage.local.set({ autopilot: false });
+      alert("⚠️ Autofill finished, but could not find the submit button. Autopilot paused.");
+    }
+    return;
+  }
+}
+
+// --- 4. THE CORE FILLING ENGINE ---
+async function processAppraisal(alwaysTop) {
+  const radios = document.querySelectorAll("input[type='radio']");
+  if (radios.length === 0) return;
+
   const groups = {};
   radios.forEach(radio => {
-    if (!groups[radio.name]) {
-      groups[radio.name] = [];
-    }
+    if (!groups[radio.name]) groups[radio.name] = [];
     groups[radio.name].push(radio);
   });
 
   const groupNames = Object.keys(groups);
-  
-  // --- NEW: Fetch the all-time saved count from browser memory ---
   const storageResult = await chrome.storage.local.get(['totalQuestionsFilled']);
   let allTimeCount = storageResult.totalQuestionsFilled || 0;
 
   for (let i = 0; i < groupNames.length; i++) {
-    const groupName = groupNames[i];
-    const options = groups[groupName];
-
+    const options = groups[groupNames[i]];
     let selectedIndex = 0; 
     
     if (!alwaysTop) {
@@ -49,13 +105,10 @@ async function processAppraisal(alwaysTop) {
 
     if (!targetRadio.checked) {
       targetRadio.checked = true;
-
       targetRadio.dispatchEvent(new Event('change', { bubbles: true }));
       targetRadio.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       
-      // --- NEW: Add 1 to memory, save it, and update UI ---
       allTimeCount++;
-      await chrome.storage.local.set({ totalQuestionsFilled: allTimeCount });
       chrome.runtime.sendMessage({ action: "UPDATE_COUNT", count: allTimeCount });
 
       const delay = Math.floor(Math.random() * 200) + 150;
@@ -63,72 +116,6 @@ async function processAppraisal(alwaysTop) {
     }
   }
   
-  console.log(`[ETLab Automator] Finished. Lifetime questions answered: ${allTimeCount}`);
-=======
-// Listen for commands from the popup
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "FILL_TOP") {
-    processAppraisal(true);
-    sendResponse({ status: "started" });
-  } else if (request.action === "FILL_RANDOM") {
-    processAppraisal(false);
-    sendResponse({ status: "started" });
-  }
-  return true; 
-});
-
-// Utility function to create a pause/delay
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-async function processAppraisal(alwaysTop) {
-  const radios = document.querySelectorAll("input[type='radio']");
-  if (radios.length === 0) {
-    console.warn("[ETLab Automator] No radio buttons found on this page.");
-    return;
-  }
-
-  const groups = {};
-  radios.forEach(radio => {
-    if (!groups[radio.name]) {
-      groups[radio.name] = [];
-    }
-    groups[radio.name].push(radio);
-  });
-
-  const groupNames = Object.keys(groups);
-  
-  // --- NEW: Fetch the all-time saved count from browser memory ---
-  const storageResult = await chrome.storage.local.get(['totalQuestionsFilled']);
-  let allTimeCount = storageResult.totalQuestionsFilled || 0;
-
-  for (let i = 0; i < groupNames.length; i++) {
-    const groupName = groupNames[i];
-    const options = groups[groupName];
-
-    let selectedIndex = 0; 
-    
-    if (!alwaysTop) {
-      selectedIndex = Math.floor(Math.random() * Math.min(3, options.length));
-    }
-
-    const targetRadio = options[selectedIndex];
-
-    if (!targetRadio.checked) {
-      targetRadio.checked = true;
-
-      targetRadio.dispatchEvent(new Event('change', { bubbles: true }));
-      targetRadio.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      
-      // --- NEW: Add 1 to memory, save it, and update UI ---
-      allTimeCount++;
-      await chrome.storage.local.set({ totalQuestionsFilled: allTimeCount });
-      chrome.runtime.sendMessage({ action: "UPDATE_COUNT", count: allTimeCount });
-
-      const delay = Math.floor(Math.random() * 200) + 150;
-      await sleep(delay);
-    }
-  }
-  
-  console.log(`[ETLab Automator] Finished. Lifetime questions answered: ${allTimeCount}`);
->>>>>>> 50b7d4223cc992eb7d1c38839ca7aa88e9442d2c
+  await chrome.storage.local.set({ totalQuestionsFilled: allTimeCount });
+  console.log(`[ETLab Assistant] Form processed.`);
 }
